@@ -1,0 +1,7 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Sunrise: half sun on the horizon with rays (inside the 66dp safe circle) -->
+    <path android:fillColor="#12141C" android:pathData="M38,62 A16,16 0 0,1 70,62 Z"/>
+    <path android:strokeColor="#12141C" android:strokeWidth="4.5" android:strokeLineCap="round" android:pathData="M31,62 L77,62"/>
+    <path android:strokeColor="#12141C" android:strokeWidth="4.5" android:strokeLineCap="round" android:pathData="M54,33 L54,39 M34.5,41.5 L38.8,45.8 M73.5,41.5 L69.2,45.8 M27,53 L32,53 M81,53 L76,53"/>
+    <path android:strokeColor="#12141C" android:strokeWidth="4.5" android:strokeLineCap="round" android:pathData="M42,72 L66,72"/>
+</vector>

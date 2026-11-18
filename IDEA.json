@@ -1,0 +1,70 @@
+{
+  "name": "LeaveBy",
+  "slug": "leaveby",
+  "tagline": "Get out the door on time: a routine runner that learns how long your steps really take and tells you exactly when to start.",
+  "problem": "People with ADHD are chronically late because of time blindness: they underestimate how long getting ready takes, then suddenly find they're behind even though they 'started with plenty of time'. Common advice is to time your real routine, keep a log, and plan backward from the departure time. Doing that by hand is tedious. Existing ADHD apps are either task managers (Structured, TickTick) that ignore lateness, or commute apps that only handle the drive and not the 40 minutes before it.",
+  "evidence": [
+    {
+      "source": "https://techcrunch.com/2025/04/26/latelys-new-gamified-app-helps-people-arrive-on-time",
+      "note": "Developer of Lately (an iOS app) says time blindness and poor time estimation are the toughest barriers to leaving on time. Says ADHD task apps like Structured and TickTick don't address it, and Android's Time to Leave is outdated."
+    },
+    {
+      "source": "https://www.additudemag.com/time-blindness-running-late-adhd/amp",
+      "note": "Time blindness causes chronic lateness. Advice is to measure how long routine tasks actually take."
+    },
+    {
+      "source": "https://www.choosingtherapy.com/time-blindness/",
+      "note": "Recommends 'time trials' for tasks you underestimate, like showering and getting ready, and planning backward from the deadline."
+    },
+    {
+      "source": "https://www.mumsnet.com/talk/parenting/5338437-adhd-daughter-time-blindness-and-lateness-need-help",
+      "note": "A parent cobbles together Alexa prompts for each stage of getting ready and says it 'still isn't perfect'. Shows demand for a staged, timed get-ready flow."
+    },
+    {
+      "source": "https://www.wondermind.com/?p=6009",
+      "note": "ADHD hacks for time blindness: log how long daily activities take, add buffers, use visual timers."
+    },
+    {
+      "source": "https://kick-mint.pages.dev/blog/time-blindness-app-guide",
+      "note": "Working backward from the arrival time to set a start time is a valued but niche feature. Most such apps are paid or subscription."
+    }
+  ],
+  "target_users": "Adults and teens with ADHD or time blindness who are often late for work, school, appointments or social plans, and parents running get-ready routines with kids. Also anyone who wants a no-account, offline, ad-free alternative.",
+  "core_features": [
+    "Routine builder: create reusable routines (e.g. 'Workday morning', 'Gym', 'School run'), each an ordered list of steps with an emoji, a name and an estimated duration in minutes. Steps can be reordered with up/down buttons, duplicated or deleted. Ship 2 starter templates (Morning out-the-door with shower, dress, breakfast, pack bag, shoes/keys; Quick errand).",
+    "Backward planner: pick a routine, enter 'must leave by' (or 'arrive by' + travel minutes) and a buffer (0/5/10/15 min). The app shows the computed 'Start by' time and a timeline listing each step's planned clock time. It uses LEARNED durations (see below) by default, with a toggle to compare against your original guesses. Example: 'Your guesses say start at 7:35, your real history says start at 7:12.'",
+    "Live run mode: big full-screen view of the current step with a shrinking colored time-remaining ring, the planned clock deadline for that step, and a persistent banner showing 'Leave at 8:05, 23 min left'. A running 'ahead/behind' indicator (green +3 min / red -4 min) compares now to the plan. Big 'Done' button advances (vibrate on step complete), plus 'Skip' and '+2 min'. When a step's time runs out, the ring turns red, the phone vibrates once, and an overtime counter appears. At the end: 'Out the door!' summary with on-time or late result.",
+    "Time-reality learning: every completed run records the actual duration of each step. Each step shows 'You guess 5 min, you actually take ~11 min' (rolling median of the last 7 runs) and a reality factor (x2.2). One tap on 'Use my real times' updates the estimates. This is the core wow hook: it does the time-trial logging that ADHD advice recommends, automatically.",
+    "History & streaks: list of past runs with date, routine, on-time/late by X min, and total duration. On-time streak counter and a simple per-step bar chart comparing guess vs actual (pure CSS/SVG). Share a text summary via the native share bridge (e.g. 'On time 5 days straight with LeaveBy').",
+    "Settings & data: 12/24h clock, vibration on/off, keep-screen-awake hint, export/import all data as JSON text (copy/paste), and reset."
+  ],
+  "screens": [
+    "Home: next-up card (choose routine + leave-by time, shows big 'Start by 7:12' and a countdown to start time), list of routine cards with total learned duration, on-time streak badge",
+    "Routine editor: name, emoji, step list with duration steppers, guess-vs-actual hint per step, reorder/duplicate/delete, 'Use my real times' button",
+    "Plan preview: timeline of steps with clock times, buffer, start-by time, guesses-vs-reality toggle, big 'Start routine' button",
+    "Run mode: full-screen current step, time ring, ahead/behind chip, leave-at banner, Done/Skip/+2 min, upcoming step peek",
+    "Finish summary: on-time/late result, per-step actual vs planned table, 'Update estimates?' prompt, share button",
+    "History: run log list, streak, per-routine guess-vs-actual bar chart",
+    "Settings: clock format, vibration, data export/import/reset, about"
+  ],
+  "data_model": "localStorage key 'leaveby.v1' holding one JSON object: { routines: [{ id, name, emoji, steps: [{ id, name, emoji, estMin }], createdAt }], runs: [{ id, routineId, routineName, startedAt, leaveBy, bufferMin, finishedAt, onTimeDeltaMin, steps: [{ stepId, name, plannedSec, actualSec, skipped }] }], activeRun: { routineId, leaveBy, bufferMin, stepIndex, stepStartedAt, startedAt, log: [...] } | null, settings: { clock24: bool, vibrate: bool, defaultBuffer: number }, lastPlan: { routineId, leaveBy, bufferMin } }. Learned durations are computed from runs (median of the last 7 non-skipped actualSec per stepId), not stored separately. activeRun is persisted on every action so a run survives app reload or WebView restart, and elapsed time is recomputed from timestamps rather than tick counts.",
+  "design": {
+    "bg": "#12141C",
+    "accent": "#FFB547",
+    "vibe": "Calm dark UI with a warm amber accent, like sunrise. Large rounded cards (16px radius), very big tappable targets and big tabular-number clock digits (font-variant-numeric: tabular-nums). Run mode is minimal and high-contrast: a giant SVG progress ring that shifts amber \u2192 coral #FF6B6B when overdue, plus green #4ADE80 for 'ahead'. Low cognitive load: one primary action per screen, soft transitions, emoji as step icons, no clutter. System font stack."
+  },
+  "test_scenarios": [
+    "First launch shows the 2 starter routines. Opening 'Morning out-the-door' lists its steps, and the total equals the sum of the step estimates.",
+    "Create a new routine 'Gym' with 3 steps (5, 10, 3 min), reorder step 3 to the top, delete one step, reload the page: the routine persists with the correct order.",
+    "On Home pick 'Gym', set leave-by to 30 minutes from now with a 5 min buffer: Start-by is leave-by minus (step total + 5), and the plan timeline shows correct clock times for each step.",
+    "Start a run: the ring counts down for step 1. Tapping 'Done' early moves to step 2 and the ahead/behind chip shows green with positive minutes.",
+    "Let a step exceed its estimate (or use a short 1-min step): the ring turns coral, an overtime counter appears, and the chip shows red/behind.",
+    "Mid-run, reload the page: the run resumes on the same step with elapsed time computed correctly from timestamps.",
+    "Tap '+2 min' and 'Skip': the step deadline extends by 2 minutes, skip advances, and the skipped step is marked skipped in the summary.",
+    "Finish the run: the summary shows on-time or late by X min, with actual vs planned per step. The run appears in History and the streak updates.",
+    "After 2+ runs where a step took longer than estimated, the routine editor shows 'You guess X, you actually take ~Y'. Tapping 'Use my real times' updates the estimates, and the plan preview's start-by time moves earlier.",
+    "Plan preview's guesses-vs-reality toggle switches between the two start-by times.",
+    "Export data in Settings, reset all, import the copied JSON: routines and history are restored.",
+    "Toggle 24h clock: every displayed time switches format. Toggle vibration off: no vibrate bridge calls on step completion."
+  ]
+}
